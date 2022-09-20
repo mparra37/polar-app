@@ -1,6 +1,8 @@
 package com.polar.polarsdkecghrdemo
 
 import android.graphics.Color
+import android.os.StrictMode
+import android.util.Log
 import com.androidplot.xy.LineAndPointFormatter
 import com.androidplot.xy.SimpleXYSeries
 import com.androidplot.xy.XYSeriesFormatter
@@ -27,6 +29,8 @@ class HrAndRrPlotter {
     private val xRrVals = MutableList(NVALS) { 0.0 }
     private val yRrVals = MutableList(NVALS) { 0.0 }
 
+    var myThread: MsgThread? = null
+
     init {
         val now = Date()
         val endTime = now.time.toDouble()
@@ -46,6 +50,12 @@ class HrAndRrPlotter {
         rrFormatter = LineAndPointFormatter(Color.BLUE, null, null, null)
         rrFormatter.setLegendIconEnabled(false)
         rrSeries = SimpleXYSeries(xRrVals, yRrVals, "RR")
+
+        //code to send msg to server
+//        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+//        StrictMode.setThreadPolicy(policy)
+//        myThread = MsgThread()
+//        Thread(myThread).start()
     }
 
     /**
@@ -66,6 +76,12 @@ class HrAndRrPlotter {
         yHrVals[NVALS - 1] = polarHrData.hr.toDouble()
         hrSeries.setXY(xHrVals[NVALS - 1], yHrVals[NVALS - 1], NVALS - 1)
 
+        //Toast.makeText(context, polarHrData.hr.toString(), Toast.LENGTH_SHORT).show()
+       // Log.d("PRUEBA", "HR " + polarHrData.hr)
+        //Log.d("PRUEBA", "HR " + time.toString())
+
+       // myThread!!.sendMsg(polarHrData.hr.toString())
+
         // Do RR
         // We don't know at what time the RR intervals start.  All we know is
         // the time the data arrived (the current time, now). This
@@ -76,6 +92,8 @@ class HrAndRrPlotter {
         // Scale the RR values by this to use the same axis. (Could implement
         // NormedXYSeries and use two axes)
         val rrsMs = polarHrData.rrsMs
+
+        Log.d("rrms", polarHrData.rrsMs.toString())
         val nRrVals = rrsMs.size
         if (nRrVals > 0) {
             for (i in 0 until NVALS - nRrVals) {

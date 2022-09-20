@@ -1,10 +1,14 @@
 package com.polar.polarsdkecghrdemo
 
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import com.androidplot.xy.BoundaryMode
 import com.androidplot.xy.StepMode
 import com.androidplot.xy.XYGraphWidget
@@ -33,6 +37,8 @@ class HRActivity : AppCompatActivity(), PlotterListener {
     private lateinit var textViewFwVersion: TextView
     private lateinit var plot: XYPlot
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hr)
@@ -43,6 +49,8 @@ class HRActivity : AppCompatActivity(), PlotterListener {
         textViewBattery = findViewById(R.id.hr_view_battery_level)
         textViewFwVersion = findViewById(R.id.hr_view_fw_version)
         plot = findViewById(R.id.hr_view_plot)
+
+
 
         api = defaultImplementation(
             applicationContext,
@@ -104,6 +112,8 @@ class HRActivity : AppCompatActivity(), PlotterListener {
                 plotter.addValues(polarHrData)
             }
 
+
+
             override fun polarFtpFeatureReady(identifier: String) {
                 Log.d(TAG, "Polar FTP ready $identifier")
             }
@@ -131,6 +141,8 @@ class HRActivity : AppCompatActivity(), PlotterListener {
         plot.graph.getLineLabelStyle(XYGraphWidget.Edge.LEFT).format = DecimalFormat("#")
         // These don't seem to have an effect
         plot.linesPerRangeLabel = 2
+
+
     }
 
     public override fun onDestroy() {
